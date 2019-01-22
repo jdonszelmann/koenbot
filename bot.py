@@ -1,225 +1,100 @@
 
 import discord 
 import asyncio
-import random 
-import requests 
-from discord.utils import get 
 import re 
-import json
-import threading
+import namechanger
+import reactions
+from constants import Constants
 
 with open("config.txt") as f:
 	TOKEN = f.read().strip()
 
-client = discord.Client()
+Constants.client = discord.Client()
 
-async def get_emoji(name):
-	for i in client.get_all_emojis():
-		#print(i.name)
-		if name in i.name:
-			return i
-	print(name)
-	print("PANIC")	
-
-@client.event
+@Constants.client.event
 async def on_message(message):
 	try:
 		# we do not want the bot to reply to itself
-		if message.author == client.user:
+		if message.author == Constants.client.user:
 			return
 
-		content = message.content.lower()
-		if "oof" in content and not ":oof:" in content:
-			await client.add_reaction(message,await get_emoji("oof"))
+		await reactions.check_reactions(message)
 
-		elif ("kerrie" in content or "kerry" in content or "carry" in content or "otto" in content) and not ":kerrie:" in content:
-			await client.add_reaction(message,"🇰")
-			await client.add_reaction(message,"🇪")
-			await client.add_reaction(message,"🇷")
-			await client.add_reaction(message,await get_emoji("kerrier"))
-			# await client.add_reaction(message,"®️")
-			await client.add_reaction(message,"🇮")
-			await client.add_reaction(message,await get_emoji("kerriee"))
-			# await client.add_reaction(message,"🇪")
 
-		elif "blob" in content and not ":blob:" in content:
-			await client.add_reaction(message, await get_emoji("blob"))
-
-		elif "java" in content and not ":java:" in content:
-			await client.add_reaction(message,await get_emoji("java"))
-
-		elif "c++" in content:
-			await client.add_reaction(message,await get_emoji("cpp"))	
-
-		elif "python" in content and not ":python:" in content:
-			await client.add_reaction(message,await get_emoji("python"))
-					
-		elif ("js" in content or "javascript" in content) and not ":js:" in content:
-			await client.add_reaction(message,await get_emoji("js"))
-
-		elif ("c#" in content or ("c" in content and "sharp" in content)) and not ":csharp:" in content:
-			await client.add_reaction(message,await get_emoji("csharp"))
-
-		elif ("amazing" in content or "it depends" in content):
-			await client.add_reaction(message, await get_emoji("blueball"))
-
-		elif ("fraud" in content or "fr00d" in content or "copy" in content or "copie" in content) and not ":fr00d:" in content:
-			await client.add_reaction(message,await get_emoji("fr00d"))
 
 		if "bot" not in message.channel.name:
 			return
 
+		content = message.content.lower()
+
 		if content.startswith(".help"):
-			await client.send_message(message.channel, "this is koenbot. amazing!")
+			await Constants.client.send_message(message.channel, "this is koenbot. amazing!")
 		
 	except Exception as e:
 		print(e)
 		pass
 
 
+async def every10sec():
+	while True:
+		newnick = namechanger.generate_expr("jona","than")
+		await Constants.client.change_nickname(
+			Constants.membersbyid["131399667442384896"][0],
+			newnick
+		)
+		print("changed to {}".format(newnick))
+		await asyncio.sleep(10)
 
-def generate_expr():
-	a = "jona"
-	b = "than"
+async def every5sec():
+	while True:
+		await asyncio.sleep(5)
 
-	infront = ""
-	operator = "^"
+async def every30sec():
+	while True:
+		await asyncio.sleep(30)
 
-	def invertandor():
-		nonlocal operator,a,b,infront
+async def every60sec():
+	while True:
+		await asyncio.sleep(60)
 
-		if random.choice([True,False]):
-			if  a.startswith("¬") and operator == "v":
-				a = a[1:]
-				operator = "->"
-
-			elif b.startswith("¬") and operator == "^" and infront.startswith("¬"):
-				b = b[1:]
-				operator = "->"
-				infront = infront[1:]
-			return
-
-		if operator == "->":
-			choice = random.choice([0,1,2,3,4,5,6])
-			if choice == 1:
-				operator = "v"
-				a = "¬" + a
-			elif choice == 2:
-				operator = "^"
-				b = "¬" + b
-				infront = "¬" + infront
-
-			elif choice == 3:
-				if a.startswith("¬") and b.startswith("¬"):
-					if random.choice([True,False]):
-						a = a[1:]
-						b = b[1:]
-						a,b=b,a
-					else:
-						a = "¬" + a
-						b = "¬" + b
-						a,b=b,a
-				else:
-					a = "¬" + a
-					b = "¬" + b
-					a,b=b,a
-			return
-
-		choice = random.choice([0,1,2])
-
-		if choice == 0:
-			if a.startswith("¬") and b.startswith("¬") and infront.startswith("¬"):
-				a = a[1:]
-				b = b[1:]
-				infront = infront[1:]
-				if operator == "v":
-					operator = "^"
-				elif operator == "^":
-					operator = "v"
-			else:
-				a = "¬" + a
-				b = "¬" + b
-				infront += "¬"
-				if operator == "v":
-					operator = "^"
-				elif operator == "^":
-					operator = "v"
-		elif choice == 1:
-			a = "¬" + a
-			b = "¬" + b			
-			infront += "¬"
-			if operator == "v":
-				operator = "^"
-			elif operator == "^":
-				operator = "v"
-
-	while random.choice([True,True,True,True,True,True,True,True,True,False]):
-		invertandor()
-
-	while infront.startswith("¬¬¬¬¬"):
-		infront = infront[2:]
-
-	while a.startswith("¬¬¬¬¬"):
-		a = a[2:]
-	while b.startswith("¬¬¬¬¬"):
-		b = b[2:]
-
-	name = "(" + infront + "(" + a + " " + operator + " " + b + ")" + ")"
-	return name
-
-def namechanger():
-	async def amazing():
-		while True:
-			await asyncio.sleep(10)
-			
-			newnick = generate_expr()
-			await client.change_nickname(creator, newnick)
-
-	await amazing()
-
-
-@client.event
+@Constants.client.event
 async def on_ready():
-	texchannels = []
-	members = []
-	servers = []
-	general = None
-	for server in client.servers:
-		servers.append(server)
+	global members,servers,general,creator,bot,texchannels
+
+
+	print("retrieving server info")
+	for server in Constants.client.servers:
+		Constants.servers[server.name] = server
 		for channel in server.channels:
 			if str(channel.type) == "text":
-				texchannels.append(channel)
-				if "club" in channel.name:
-					general = channel
+				Constants.texchannels[(channel.name,server.name)] = channel
 		for member in server.members:
-			members.append(member)
+			if member.name in Constants.membersbyname:
+				Constants.membersbyname[member.name][1].append(server)
+			else:
+				Constants.membersbyname[member.name] = [member,[server]]
+
+			if member.name in Constants.membersbyid:
+				Constants.membersbyid[member.id][1].append(server)
+			else:
+				Constants.membersbyid[member.id] = [member,[server]]
+	print("starting...")
 
 	#await client.send_message(general,"pr(oof)")
 
-	creator = None
-	elmedint = None
-	bot = None
 
-	for i in members:
-		if i.id == "131399667442384896":
-			creator = i
-		elif i.id == "507492645195743252":
-			bot = i 
-
-	await client.change_nickname(bot, "(.)koenbot")
+	await Constants.client.change_nickname(Constants.membersbyid["507492645195743252"][0], "(.)koenbot")
 
 	# role = get(bot.server.roles, name="Beta")
 	# await client.add_roles(bot, role)
 
 	print('koenbot started')
 
-	t = threading.Thread(target=namechanger)
-	t.daemon = True
-	t.start()
-
-	while True:
-		await asyncio.sleep(1)
-
+	loop = asyncio.get_event_loop()
+	task = loop.create_task(every60sec())
+	task = loop.create_task(every30sec())
+	task = loop.create_task(every10sec())
+	task = loop.create_task(every5sec())
 
 
-client.run(TOKEN)
+Constants.client.run(TOKEN)
