@@ -6,6 +6,7 @@ import requests
 from discord.utils import get 
 import re 
 import json
+import threading
 
 with open("config.txt") as f:
 	TOKEN = f.read().strip()
@@ -65,14 +66,8 @@ async def on_message(message):
 		elif ("fraud" in content or "fr00d" in content or "copy" in content or "copie" in content) and not ":fr00d:" in content:
 			await client.add_reaction(message,await get_emoji("fr00d"))
 
-		if content.startswith(".rank"):
-			if message.channel.name == "advent-of-code":
-				print(getscores())
-				await client.send_message(message.channel,getscores())
-
 		if "bot" not in message.channel.name:
 			return
-
 
 		if content.startswith(".help"):
 			await client.send_message(message.channel, "this is koenbot. amazing!")
@@ -80,22 +75,6 @@ async def on_message(message):
 	except Exception as e:
 		print(e)
 		pass
-
-def getscores():
-	try:
-		res = requests.get("https://adventofcode.com/2018/leaderboard/private/view/395883.json",cookies={"session": "53616c7465645f5ffe6659953d46f55651eb1b50cdc3173c9903ea6d3b0480cb9da3c9fd2027cc4d609864228ef4fc07"}).json()
-	except:
-		return "an error occured"
-	table = """```
-rank    name                    stars  score
-"""
-	
-	for index, value in enumerate(sorted(list(res["members"].values()), key=lambda item:item["local_score"],reverse=True)):
-		print(value)
-		table += str(index).ljust(8)+str(value["name"]).ljust(24)+str(value["stars"]).ljust(8)+str(value["local_score"]).ljust(8)+"\n"
-	table += "```"
-	
-	return table
 
 
 
@@ -188,6 +167,16 @@ def generate_expr():
 	name = "(" + infront + "(" + a + " " + operator + " " + b + ")" + ")"
 	return name
 
+def namechanger():
+	async def amazing():
+		while True:
+			await asyncio.sleep(10)
+			
+			newnick = generate_expr()
+			await client.change_nickname(creator, newnick)
+
+	await amazing()
+
 
 @client.event
 async def on_ready():
@@ -216,8 +205,6 @@ async def on_ready():
 			creator = i
 		elif i.id == "507492645195743252":
 			bot = i 
-		elif i.id == "481464825776570368":
-			elmedin = i
 
 	await client.change_nickname(bot, "(.)koenbot")
 
@@ -226,20 +213,12 @@ async def on_ready():
 
 	print('koenbot started')
 
-	def randomcapitalize(x):
-		return "".join((i.upper() if random.choice([True,False]) else i for i in x))
+	t = threading.Thread(target=namechanger)
+	t.daemon = True
+	t.start()
 
-	async def amazing():
-		while True:
-			await asyncio.sleep(10)
-			
-			#await client.change_nickname(elmedin,randomcapitalize("doctor"))
-			newnick = generate_expr()
-			await client.change_nickname(creator, newnick)
-
-			#print("changed to {}".format(newnick))
-
-	await amazing()
+	while True:
+		await asyncio.sleep(1)
 
 
 
