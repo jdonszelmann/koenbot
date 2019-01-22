@@ -50,7 +50,7 @@ async def check_reactions(message):
 	if ("fraud" in content or "fr00d" in content or "copy" in content or "copie" in content) and not ":fr00d:" in content:
 		await Constants.client.add_reaction(message,await get_emoji("fr00d"))
 
-	if "ns" in content:
+	if content.endswith("ns") or content.startswith("ns") or " ns " in content:
 		await Constants.client.add_reaction(message,await get_emoji("nederlandse_stoorwegen"))
 
 	if "eclipse" in content:
