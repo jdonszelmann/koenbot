@@ -37,7 +37,7 @@ async def on_message(message):
 
 async def every10sec():
 	while True:
-		newnick = namechanger.generate_expr("jona","than")
+		newnick = namechanger.generate_expr("jona","yeet")
 		await Constants.client.change_nickname(
 			Constants.membersbyid["131399667442384896"][0],
 			newnick
