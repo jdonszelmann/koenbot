@@ -140,15 +140,15 @@
 				console.log(i)
 
 
-
-				document.getElementById("messagesdiv").innerHTML += `
+				res = ""
+				res += `
 					<div class="question" onclick = "clickmessage(this)" onmouseover = "hovermessage(this)" onmouseout = "leavemessage(this)" messageid=${i.id}>
 						<div class="messagetitle">${i.channel}:</div>
 						<div class="messagecontent">${i.name}</div>
 						<div class="hiddencontent hidden">
 				`
 				for(let j of i.questions){
-					document.getElementById("messagesdiv").innerHTML +=  `
+					res +=  `
 								<div class="message">
 									<div class="messagetitle">${j.author}</div>
 									<div class="messagecontent">${j.content}</div>
@@ -156,10 +156,12 @@
 					`
 				}
 
-				document.getElementById("messagesdiv").innerHTML += `
-						</div>	
+				res += `
+						</div>		
 					</div>
 				`
+
+				document.getElementById("messagesdiv").innerHTML += res
 			}
 		})
 	</script>
