@@ -44,7 +44,7 @@ def serverproc():
 				pass
 
 			self.send_response(200)
-			self.send_header('Content-type', 'application/json')
+			self.send_header('Content-type', 'application/json; charset=UTF-8')
 			self.end_headers()
 
 			self.wfile.write(json.dumps({
@@ -56,7 +56,7 @@ def serverproc():
 			traceback.print_exc()
 
 			self.send_response(200)
-			self.send_header('Content-type', 'application/json')
+			self.send_header('Content-type', 'application/json; charset=UTF-8')
 			self.end_headers()
 
 			self.wfile.write(json.dumps({
