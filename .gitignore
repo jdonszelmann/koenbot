@@ -1,3 +1,4 @@
 config.txt
 .*
 !/.gitignore
+serverfiles/questions/*

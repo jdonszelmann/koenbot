@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title id="title"></title>
+
+	<script type="text/javascript">
+		let messages = [
+			XXXXXXXXXXXXXXXXXXXXX
+		]
+		let baseurl = "localhost:80"
+	</script>
+
+
+	<style>
+		.message{
+			border-bottom: 1px solid #D4D4D5;
+			border-radius: 3px;
+			background-color:#26262B;
+			margin:2px;
+			padding:4px;
+		}
+
+		body{
+			display:grid;
+			grid-column-gap: 30px;
+			grid-template-columns: 150px auto;
+			background: #26262B;
+			color:white;
+		}
+
+		.messagetitle{
+			font-size:20px;
+		}
+
+		.messagecontent{
+
+		}
+
+		#sidebar{
+			grid-column-start: 1;
+			grid-column-end: 2;		
+			height:100%;
+			position:fixed;
+			background-color:#7289DA;
+			margin:2px;
+			border-radius:3px;
+		}
+
+		#messages{
+			grid-column-start: 2;
+			grid-column-end: 3;
+		}
+
+		input{
+			width:90%;
+			margin-left:5%;
+		}
+
+		button{
+			width:100%;
+			padding:2px;
+		}
+
+	</style>
+
+</head>
+<body>
+	<div id="sidebar">
+		question name: <br><br>
+		<input id="questionname" type="text"></input>
+		<br>
+		<br>
+		<button onclick="done()">submit</input>
+	</div>
+
+	<div id="messages">
+
+
+	</div> 
+
+	<script type="text/javascript">
+
+		function done(){
+			let xhr = new XMLHttpRequest();
+			xhr.open("POST", `http://${baseurl}/`, true)
+			xhr.setRequestHeader("Content-Type", "application/json")
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					var json = JSON.parse(xhr.responseText.replace(/HTTP\/1\.0[\s\S]*/g,""));
+					window.location = json.location
+				}
+			};
+
+			xhr.send(JSON.stringify({test:"okay"}))		
+		}
+
+		function clickmessage(self){
+			if(self.clicked == undefined){
+				self.clicked = false;
+			}else{
+				self.clicked = !self.clicked
+			}
+
+
+			if(self.clicked){
+				self.style.backgroundColor = "rgba(30,155,30,0.8)"
+			}else{
+				self.style.backgroundColor = "rgb(155,155,155)"	
+			}
+		}
+
+		function hovermessage(self){
+			if(self.clicked == undefined){
+				self.clicked = false;
+			}
+
+			if(self.clicked){
+				self.style.backgroundColor = "rgba(30,155,30,0.8)"
+			}else{
+				self.style.backgroundColor = "rgba(155,155,155,0.8)"	
+			}			
+		}
+
+		function leavemessage(self){
+			if(self.clicked == undefined){
+				self.clicked = false;
+			}
+
+			if(self.clicked){
+				self.style.backgroundColor = "rgba(30,155,30,0.8)"
+			}else{
+				self.style.backgroundColor = "#26262B"	
+			}			
+		}
+
+
+		let messagediv = document.getElementById("messages")
+		for(let i of messages){
+			messagediv.innerHTML += `
+				<div class="message" onclick = "clickmessage(this)" onmouseover = "hovermessage(this)" onmouseout = "leavemessage(this)" messageid=${i.id}>
+					<div class="messagetitle">${i.author}:</div>
+					<div class="messagecontent">${i.content}</div>
+				</div>
+			`
+		}
+
+	</script>
+
+</body>
+</html>
