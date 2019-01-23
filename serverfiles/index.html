@@ -147,16 +147,17 @@
 						<div class="messagecontent">${i.name}</div>
 						<div class="hiddencontent hidden">
 				`
-				
-				document.getElementById("messagesdiv").innerHTML +=  `
-							<div class="message">
-								<div class="messagetitle">${j.author}
-								<div class="messagecontent">${j.content}
-							</div>
-				`
+				for(let j of i.questions){
+					document.getElementById("messagesdiv").innerHTML +=  `
+								<div class="message">
+									<div class="messagetitle">${j.author}
+									<div class="messagecontent">${j.content}
+								</div>
+					`
+				}
 
 				document.getElementById("messagesdiv").innerHTML += `
-						</div>
+						</div>	
 					</div>
 				`
 			}
