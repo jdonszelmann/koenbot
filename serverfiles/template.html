@@ -153,7 +153,7 @@
 		}
 
 
-		let messagediv = document.getElementById("messages")
+		let messagediv = document.getElementById("messagesdiv")
 		for(let i of messages){
 			messagediv.innerHTML += `
 				<div class="message" onclick = "clickmessage(this)" onmouseover = "hovermessage(this)" onmouseout = "leavemessage(this)" messageid=${i.id}>
