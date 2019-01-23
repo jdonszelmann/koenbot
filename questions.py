@@ -121,7 +121,7 @@ async def onmessage(message):
 								escape(message.channel.name),
 								escape(message.channel.id),
 								escape(questionnumber),
-							)
+							) + "}"
 							for i in Constants.last50msgs[message.channel.id]
 						))
 				)
