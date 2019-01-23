@@ -40,7 +40,7 @@ def serverproc():
 
 				with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:
 					json.dump(currentjson,f,indent=2)
-			else:w
+			else:
 				pass
 
 			self.wfile.write(json.dumps({
