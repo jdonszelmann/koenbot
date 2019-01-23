@@ -18,46 +18,46 @@ def serverproc():
 		data = self.rfile.read(int(self.headers['Content-Length']))
 
 
-		try:
-			jsondata = json.loads(data)
+		# try:
+		jsondata = json.loads(data)
 
-			print("POST")
+		print("POST")
 
-			with open(os.path.join(path,"serverfiles","questions.json")) as f:
-				currentjson = json.load(f)
+		with open(os.path.join(path,"serverfiles","questions.json")) as f:
+			currentjson = json.load(f)
 
-			selected = list(filter(lambda i:i["selected"], jsondata["messages"]))
+		selected = list(filter(lambda i:i["selected"], jsondata["messages"]))
 
-			if len(selected) > 0:
-				currentjson.append({
-					"questions":selected,
-					"channel":selected[0]["channelname"],
-					"name":jsondata["name"]
-				})
+		if len(selected) > 0:
+			currentjson.append({
+				"questions":selected,
+				"channel":selected[0]["channelname"],
+				"name":jsondata["name"]
+			})
 
 
-				with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:
-					json.dump(currentjson,f,indent=2)
-			else:
-				pass
+			with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:
+				json.dump(currentjson,f,indent=2)
+		else:
+			pass
 
-			self.wfile.write(json.dumps({
-				"location":'http://{}/index.html'.format(baseurl)
-			}).encode("utf-8"))
-			self.send_response(200)
-			self.end_headers()
-			return
+		self.wfile.write(json.dumps({
+			"location":'http://{}/index.html'.format(baseurl)
+		}).encode("utf-8"))
+		self.send_response(200)
+		self.end_headers()
+		return
 
-		except Exception as e:
-			print(e)
+		# except Exception as e:
+		# 	print(e)
 
-			self.wfile.write(json.dumps({
-				"location":'http://{}/error.html'.format(baseurl)
-			}).encode("utf-8"))
-			self.send_response(200)
-			self.end_headers()
+		# 	self.wfile.write(json.dumps({
+		# 		"location":'http://{}/error.html'.format(baseurl)
+		# 	}).encode("utf-8"))
+		# 	self.send_response(200)
+		# 	self.end_headers()
 
-			return
+		# 	return
 
 
 	Handler.do_POST = do_POST
