@@ -13,17 +13,19 @@ with open("config.txt") as f:
 	PORT = int(lines[2].strip())
 
 def escape(msg):
-	return msg.replace(
-		"\"","\\\""
-	).replace(
-		"\'","\\\'"
-	).replace(
-		"`","\\`"
-	).replace(
-		"<","&lt"
-	).replace(
-		">","&gt"
-	) + "}"
+	if type(msg) == str:
+		return msg.replace(
+			"\"","\\\""
+		).replace(
+			"\'","\\\'"
+		).replace(
+			"`","\\`"
+		).replace(
+			"<","&lt"
+		).replace(
+			">","&gt"
+		) + "}"
+	return msg
 
 def serverproc():
 	os.chdir(os.path.join(path,"serverfiles"))
