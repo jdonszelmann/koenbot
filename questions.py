@@ -9,7 +9,7 @@ import traceback
 path = os.path.dirname(os.path.abspath(__file__))
 with open("config.txt") as f:
 	lines = f.readlines()
-	baseurl = lines[1].strip() + ":" + lines[2].strip()
+	baseurl = lines[1].strip()
 	PORT = int(lines[2].strip())
 
 def serverproc():
