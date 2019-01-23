@@ -126,7 +126,7 @@
 			for(let i of allquestions){
 				for(let j of i.questions){
 					for(let k of keywords){
-						if(j.content.includes(k) || j.author.includes(k) || j.channelname.includes(k)){
+						if(j.content.includes(k) || j.author.includes(k) || j.channelname.includes(k) || i.name.includes(k)){
 							found.push([allquestions.indexOf(i),i.channel,j.id])
 						}
 					}
