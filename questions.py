@@ -43,21 +43,25 @@ def serverproc():
 			else:
 				pass
 
+			self.send_response(200)
+			self.send_header('Content-type', 'application/json')
+			self.end_headers()
+
 			self.wfile.write(json.dumps({
 				"location":'http://{}/index.html'.format(baseurl)
 			}).encode("utf-8"))
-			self.send_response(200)
-			self.end_headers()
 			return
 
 		except Exception as e:
 			traceback.print_exc()
 
+			self.send_response(200)
+			self.send_header('Content-type', 'application/json')
+			self.end_headers()
+
 			self.wfile.write(json.dumps({
 				"location":'http://{}/error.html'.format(baseurl)
 			}).encode("utf-8"))
-			self.send_response(200)
-			self.end_headers()
 
 			return
 
