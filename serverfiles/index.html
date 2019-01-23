@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
 
-	<title id="title"></title>
+	<title id="title">question index</title>
 
 	<style>
 		.question{
@@ -138,23 +138,24 @@
 		}).then(function(json){
 			for(let i of json){
 				console.log(i)
-				let messages = []
 
-				for(let j of i.questions){
-					messages.push(`
-						<div class="message">
-							<div class="messagetitle">${j.author}
-							<div class="messagecontent">${j.content}
-						</div>
-					`)
-				}
+
 
 				document.getElementById("messagesdiv").innerHTML += `
 					<div class="question" onclick = "clickmessage(this)" onmouseover = "hovermessage(this)" onmouseout = "leavemessage(this)" messageid=${i.id}>
 						<div class="messagetitle">${i.channel}:</div>
 						<div class="messagecontent">${i.name}</div>
 						<div class="hiddencontent hidden">
-							${messages}
+				`
+				
+				document.getElementById("messagesdiv").innerHTML +=  `
+							<div class="message">
+								<div class="messagetitle">${j.author}
+								<div class="messagecontent">${j.content}
+							</div>
+				`
+
+				document.getElementById("messagesdiv").innerHTML += `
 						</div>
 					</div>
 				`
