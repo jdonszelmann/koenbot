@@ -4,6 +4,7 @@ import threading
 import http.server
 import socketserver
 import json
+import traceback
 
 path = os.path.dirname(os.path.abspath(__file__))
 baseurl = "145.130.58.197:8800"
@@ -16,48 +17,49 @@ def serverproc():
 
 	def do_POST(self):
 		data = self.rfile.read(int(self.headers['Content-Length']))
+		if type(data) == bytes:
+			data = data.decode("utf-8")
+
+		try:
+			jsondata = json.loads(data)
+
+			print("POST")
+
+			with open(os.path.join(path,"serverfiles","questions.json")) as f:
+				currentjson = json.load(f)
+
+			selected = list(filter(lambda i:i["selected"], jsondata["messages"]))
+
+			if len(selected) > 0:
+				currentjson.append({
+					"questions":selected,
+					"channel":selected[0]["channelname"],
+					"name":jsondata["name"]
+				})
 
 
-		# try:
-		jsondata = json.loads(data)
+				with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:
+					json.dump(currentjson,f,indent=2)
+			else:w
+				pass
 
-		print("POST")
+			self.wfile.write(json.dumps({
+				"location":'http://{}/index.html'.format(baseurl)
+			}).encode("utf-8"))
+			self.send_response(200)
+			self.end_headers()
+			return
 
-		with open(os.path.join(path,"serverfiles","questions.json")) as f:
-			currentjson = json.load(f)
+		except Exception as e:
+			traceback.print_exc()
 
-		selected = list(filter(lambda i:i["selected"], jsondata["messages"]))
+			self.wfile.write(json.dumps({
+				"location":'http://{}/error.html'.format(baseurl)
+			}).encode("utf-8"))
+			self.send_response(200)
+			self.end_headers()
 
-		if len(selected) > 0:
-			currentjson.append({
-				"questions":selected,
-				"channel":selected[0]["channelname"],
-				"name":jsondata["name"]
-			})
-
-
-			with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:
-				json.dump(currentjson,f,indent=2)
-		else:
-			pass
-
-		self.wfile.write(json.dumps({
-			"location":'http://{}/index.html'.format(baseurl)
-		}).encode("utf-8"))
-		self.send_response(200)
-		self.end_headers()
-		return
-
-		# except Exception as e:
-		# 	print(e)
-
-		# 	self.wfile.write(json.dumps({
-		# 		"location":'http://{}/error.html'.format(baseurl)
-		# 	}).encode("utf-8"))
-		# 	self.send_response(200)
-		# 	self.end_headers()
-
-		# 	return
+			return
 
 
 	Handler.do_POST = do_POST

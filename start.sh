@@ -1,6 +1,6 @@
 ./stop.sh
 
 rm nohup.out
-git pull origin master
+git reset --hard origin/master
 nohup sudo python3 bot.py & 
 
