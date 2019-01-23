@@ -106,6 +106,16 @@ async def onmessage(message):
 								message.channel.name,
 								message.channel.id,
 								questionnumber,
+							).replace(
+								"\"","\\\""
+							).replace(
+								"\'","\\\'"
+							).replace(
+								"`","\\`"
+							).replace(
+								"<","&lt"
+							).replace(
+								">","&gt"
 							) + "}"
 							for i in Constants.last50msgs[message.channel.id]
 						))
