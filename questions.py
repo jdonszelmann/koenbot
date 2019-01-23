@@ -24,7 +24,7 @@ def escape(msg):
 			"<","&lt"
 		).replace(
 			">","&gt"
-		) + "}"
+		)
 	return msg
 
 def serverproc():
