@@ -50,7 +50,8 @@ def serverproc():
 				currentjson.append({
 					"questions":selected,
 					"channel":selected[0]["channelname"],
-					"name":jsondata["name"]
+					"name":jsondata["name"],
+					"qid":selected[0]["qid"]
 				})
 
 				with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:

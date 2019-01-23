@@ -8,10 +8,10 @@
 
 	<style>
 		.question{
-			border-bottom: 1px solid #D4D4D5;
-			border-radius: 3px;
+			border-bottom: 2px solid #D4D4D5;
 			background-color:#26262B;
 			margin:2px;
+			margin-bottom:30px;
 			padding:4px;
 		}
 
@@ -47,6 +47,7 @@
 			background-color:#7289DA;
 			margin:2px;
 			border-radius:3px;
+			color:black;
 		}
 
 		#messagesdiv{
@@ -67,17 +68,42 @@
 		.hidden{
 			display: none;
 		}
+
+		#searchresults{
+			padding:4px;
+			color:black;
+			min-height: 150px;
+		}
+		#searchresults a{
+			color:black !important;
+		}
+		#searchresults a:before{
+			content:"● ";
+		}
 	</style>
+
+	<script>
+		var allquestions = []
+	</script>
 
 </head>
 <body>
 	<div id="sidebar">
 		Search:
 		<br><br>
-		<input id="questionname" type="text"></input>
+		<input id="keywords" type="text"></input>
 		<br>
 		<br>
-		<button onclick="done()">submit</input>
+		<button onclick="search()">search</button>
+		<br>
+		<button onclick="closeall()">close all</button>
+		<br>
+		<button onclick="openall()">open all</button>
+	
+	
+		<div id="searchresults">
+			search results:<br>
+		</div>	
 	</div>
 
 	<div id="messagesdiv">
@@ -86,6 +112,87 @@
 	</div> 
 
 	<script>
+
+		function search(){
+			let keywords = document.getElementById("keywords").value.split(/ +|,/gi)
+
+
+			if(allquestions.length == 0){
+				return
+			}
+
+			let found = []
+
+			for(let i of allquestions){
+				for(let j of i.questions){
+					for(let k of keywords){
+						if(j.content.includes(k) || j.author.includes(k) || j.channelname.includes(k)){
+							found.push([allquestions.indexOf(i),i.channel,j.id])
+						}
+					}
+				}
+			}
+
+			hadset = new Set();
+			searchresdiv = document.getElementById("searchresults")
+			searchresdiv.innerHTML = "search results:<br>"
+			for(let i of found){
+				if(!hadset.has(i[0])){
+					searchresdiv.innerHTML += `
+						<a href="#q${i[0]}" onclick="closeall();openquestion(${i[0]})">${i[1]}</a><br>
+					` 
+					hadset.add(i[0])
+				}
+			}
+		}
+
+		function closeall(){
+			for(let i = 0; i < allquestions.length; i++){
+				closequestion(i)
+			}
+		}
+
+		function openall(){
+			for(let i = 0; i < allquestions.length; i++){
+				openquestion(i)
+			}
+		}
+
+		function openquestion(id){
+			let nthquestion = document.getElementsByClassName(`q${id}`)[0]
+			for(let i of nthquestion.childNodes){			
+				let foundclass = false
+				if(i.className != undefined){
+					for(let j of i.className.split(' ')){
+						if(j == "hiddencontent"){
+							foundclass = true
+						}
+					}
+				}
+				if(foundclass){
+					i.style.display = "block"
+					nthquestion.style.backgroundColor = "rgba(30,155,30,0.8)"
+				}
+			}
+		}
+
+		function closequestion(id){
+			let nthquestion = document.getElementsByClassName(`q${id}`)[0]
+			for(let i of nthquestion.childNodes){			
+				let foundclass = false
+				if(i.className != undefined){
+					for(let j of i.className.split(' ')){
+						if(j == "hiddencontent"){
+							foundclass = true
+						}
+					}
+				}
+				if(foundclass){
+					i.style.display = "none"
+					nthquestion.style.backgroundColor = "#26262B"
+				}
+			}
+		}
 
 		function clickmessage(self){
 			console.log(self.childNodes)
@@ -101,11 +208,20 @@
 				if(foundclass){
 					if(i.style.display == "block"){
 						i.style.display = "none"
+						self.style.backgroundColor = "#26262B"
 					}else{
 						i.style.display = "block"
+						self.style.backgroundColor = "rgba(30,155,30,0.8)"
 					}
 				}
 			}
+
+			if(self.clicked == undefined){
+				self.clicked = true;
+			}else{
+				self.clicked = !self.clicked;
+			}
+
 		}
 
 		function hovermessage(self){
@@ -113,11 +229,12 @@
 				self.clicked = false;
 			}
 
+
 			if(self.clicked){
 				self.style.backgroundColor = "rgba(30,155,30,0.8)"
 			}else{
 				self.style.backgroundColor = "rgba(155,155,155,0.8)"	
-			}			
+			}	
 		}
 
 		function leavemessage(self){
@@ -132,24 +249,24 @@
 			}			
 		}
 
-
 		fetch("questions.json").then(function(res){
 			return res.json()
 		}).then(function(json){
 			for(let i of json){
-				console.log(i)
+				allquestions.push(i)
 
 
 				res = ""
 				res += `
-					<div class="question" onclick = "clickmessage(this)" onmouseover = "hovermessage(this)" onmouseout = "leavemessage(this)" messageid=${i.id}>
+					<div class="question q${allquestions.indexOf(i)}" onclick = "clickmessage(this)" onmouseover = "hovermessage(this)" onmouseout = "leavemessage(this)" >
 						<div class="messagetitle">${i.channel}:</div>
 						<div class="messagecontent">${i.name}</div>
+						<a name=q${allquestions.indexOf(i)}></a>
 						<div class="hiddencontent hidden">
 				`
 				for(let j of i.questions){
 					res +=  `
-								<div class="message">
+								<div class="message m${j.id}">
 									<div class="messagetitle">${j.author}</div>
 									<div class="messagecontent">${j.content}</div>
 								</div>

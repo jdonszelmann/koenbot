@@ -72,7 +72,7 @@
 		question name: <br><br>
 		<input id="questionname" type="text"></input>
 		<br>
-		<button onclick="done()">submit</input>
+		<button onclick="done()">submit</button>
 	</div>
 
 	<div id="messagesdiv">
@@ -89,6 +89,19 @@
 		}
 
 		function done(){
+			let numselected = 0
+			for(let i of messages){
+				if(i.selected){
+					numselected++;
+				}
+			}
+
+			if(document.getElementById("questionname").value == ""){
+				return alert("please provide a question name")
+			}
+			if(numselected == 0){
+				return alert("please select some messages by clicking on them")
+			}
 			let xhr = new XMLHttpRequest();
 			xhr.open("POST", `http://${baseurl}/`, true)
 			xhr.setRequestHeader("Content-Type", "application/json")
