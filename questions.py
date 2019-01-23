@@ -62,18 +62,19 @@ def serverproc():
 
 	Handler.do_POST = do_POST
 
-	with socketserver.TCPServer(("", PORT), Handler) as httpd:
-		print("serving at port", PORT)
-		httpd.serve_forever()
+	httpd = socketserver.TCPServer(("", PORT), Handler)
+	print("serving at port", PORT)
+	httpd.serve_forever()
 
 def init():
 	threading.Thread(target=serverproc,daemon=True).start()
-
-	for i in os.listdir(os.path.join(path,"serverfiles","questions")):
-		print("removing {}".format(i))
-		if os.path.isfile(os.path.join(path,"serverfiles","questions",i)):
-			os.remove(os.path.join(path,"serverfiles","questions",i))
-
+	try:
+		for i in os.listdir(os.path.join(path,"serverfiles","questions")):
+			print("removing {}".format(i))
+			if os.path.isfile(os.path.join(path,"serverfiles","questions",i)):
+				os.remove(os.path.join(path,"serverfiles","questions",i))
+	except FileNotFoundError:
+		os.mkdir(os.path.join(path,"serverfiles","questions"))
 
 
 async def onmessage(message):

@@ -2,5 +2,5 @@
 
 rm nohup.out
 git pull origin master
-nohup python3 bot.py & 
+nohup sudo python3 bot.py & 
 
