@@ -7,11 +7,12 @@ import json
 import traceback
 
 path = os.path.dirname(os.path.abspath(__file__))
-baseurl = "145.130.58.197:8800"
+with open("config.txt") as f:
+	lines = f.readlines()
+	baseurl = lines[1].strip() + ":" + lines[2].strip()
+	PORT = int(lines[2].strip())
 
 def serverproc():
-	PORT = 80
-
 	os.chdir(os.path.join(path,"serverfiles"))
 	Handler = http.server.SimpleHTTPRequestHandler
 
@@ -36,7 +37,6 @@ def serverproc():
 					"channel":selected[0]["channelname"],
 					"name":jsondata["name"]
 				})
-
 
 				with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:
 					json.dump(currentjson,f,indent=2)
@@ -130,6 +130,9 @@ async def onmessage(message):
 				message.channel,
 				"http://{}/questions/q{}.html".format(
 					baseurl,
+					str(questionnumber)
+				) + "\nhttp://{}/questions/q{}.html".format(
+					"192.168.2.254:8800",
 					str(questionnumber)
 				)
 			)

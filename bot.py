@@ -10,7 +10,7 @@ import questions
 
 
 with open("config.txt") as f:
-	TOKEN = f.read().strip()
+	TOKEN = f.readlines()[0].strip()
 
 Constants.client = discord.Client()
 
@@ -41,7 +41,7 @@ async def on_message(message):
 
 async def every10sec():
 	while True:
-		newnick = namechanger.generate_expr("jona","yeet")
+		newnick = namechanger.generate_expr("jona","than")
 		try:
 			await Constants.client.change_nickname(
 				Constants.membersbyid["131399667442384896"][0],

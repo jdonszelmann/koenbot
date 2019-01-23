@@ -5,8 +5,16 @@
 	<title id="title"></title>
 
 	<style>
+		.question{
+			border-bottom: 1px solid #D4D4D5;
+			border-radius: 3px;
+			background-color:#26262B;
+			margin:2px;
+			padding:4px;
+		}
+
 		.message{
-			border: 1px solid #D4D4D5;
+			border-bottom: 1px solid #D4D4D5;
 			border-radius: 3px;
 			background-color:#26262B;
 			margin:2px;
@@ -54,6 +62,9 @@
 			padding:2px;
 		}
 
+		.hidden{
+			display: none;
+		}
 	</style>
 
 </head>
@@ -69,12 +80,84 @@
 
 	<div id="messages">
 
-		<h1>OK</h1>
 
 	</div> 
 
 	<script>
 
+		function clickmessage(self){
+			console.log(self.childNodes)
+			for(let i of self.childNodes){
+				let foundclass = false
+				if(i.className != undefined){
+					for(let j of i.className.split(' ')){
+						if(j == "hiddencontent"){
+							foundclass = true
+						}
+					}
+				}
+				if(foundclass){
+					if(i.style.display == "block"){
+						i.style.display = "none"
+					}else{
+						i.style.display = "block"
+					}
+				}
+			}
+		}
+
+		function hovermessage(self){
+			if(self.clicked == undefined){
+				self.clicked = false;
+			}
+
+			if(self.clicked){
+				self.style.backgroundColor = "rgba(30,155,30,0.8)"
+			}else{
+				self.style.backgroundColor = "rgba(155,155,155,0.8)"	
+			}			
+		}
+
+		function leavemessage(self){
+			if(self.clicked == undefined){
+				self.clicked = false;
+			}
+
+			if(self.clicked){
+				self.style.backgroundColor = "rgba(30,155,30,0.8)"
+			}else{
+				self.style.backgroundColor = "#26262B"	
+			}			
+		}
+
+
+		fetch("questions.json").then(function(res){
+			return res.json()
+		}).then(function(json){
+			for(let i of json){
+				console.log(i)
+				let messages = []
+
+				for(let j of i.questions){
+					messages.push(`
+						<div class="message">
+							<div class="messagetitle">${j.author}
+							<div class="messagecontent">${j.content}
+						</div>
+					`)
+				}
+
+				document.getElementById("messages").innerHTML += `
+					<div class="question" onclick = "clickmessage(this)" onmouseover = "hovermessage(this)" onmouseout = "leavemessage(this)" messageid=${i.id}>
+						<div class="messagetitle">${i.channel}:</div>
+						<div class="messagecontent">${i.name}</div>
+						<div class="hiddencontent hidden">
+							${messages}
+						</div>
+					</div>
+				`
+			}
+		})
 	</script>
 </body>
 </html>

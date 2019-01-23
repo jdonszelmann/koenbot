@@ -1,1 +1,1 @@
-pkill -f python3
+sudo pkill -f python3
