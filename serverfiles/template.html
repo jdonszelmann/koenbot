@@ -95,7 +95,7 @@
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4 && xhr.status === 200) {
 					var json = JSON.parse(xhr.responseText.replace(/HTTP\/1\.0[\s\S]*/g,""));
-					window.location = json.location
+					window.location = `http://${baseurl}/${json.location}`
 				}
 			};
 

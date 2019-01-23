@@ -48,7 +48,7 @@ def serverproc():
 			self.end_headers()
 
 			self.wfile.write(json.dumps({
-				"location":'http://{}/index.html'.format(baseurl)
+				"location":'index.html'.format(baseurl)
 			}).encode("utf-8"))
 			return
 
@@ -60,7 +60,7 @@ def serverproc():
 			self.end_headers()
 
 			self.wfile.write(json.dumps({
-				"location":'http://{}/error.html'.format(baseurl)
+				"location":'error.html'.format(baseurl)
 			}).encode("utf-8"))
 
 			return
