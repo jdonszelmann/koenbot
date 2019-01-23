@@ -12,6 +12,19 @@ with open("config.txt") as f:
 	baseurl = lines[1].strip()
 	PORT = int(lines[2].strip())
 
+def escape(msg):
+	return msg.replace(
+		"\"","\\\""
+	).replace(
+		"\'","\\\'"
+	).replace(
+		"`","\\`"
+	).replace(
+		"<","&lt"
+	).replace(
+		">","&gt"
+	) + "}"
+
 def serverproc():
 	os.chdir(os.path.join(path,"serverfiles"))
 	Handler = http.server.SimpleHTTPRequestHandler
@@ -99,24 +112,14 @@ async def onmessage(message):
 					"XXXXXXXXXXXXXXXXXXXXX",
 					",".join((
 							"{" + "content:\"{}\",id:\"{}\",author:\"{}\",authorid:\"{}\",channelname:\"{}\",channelid:\"{}\",selected:false,qid:\"{}\"".format(
-								i.content,
-								i.id,
-								i.author.name,
-								i.author.id,
-								message.channel.name,
-								message.channel.id,
-								questionnumber,
-							).replace(
-								"\"","\\\""
-							).replace(
-								"\'","\\\'"
-							).replace(
-								"`","\\`"
-							).replace(
-								"<","&lt"
-							).replace(
-								">","&gt"
-							) + "}"
+								escape(i.content),
+								escape(i.id),
+								escape(i.author.name),
+								escape(i.author.id),
+								escape(message.channel.name),
+								escape(message.channel.id),
+								escape(questionnumber),
+							)
 							for i in Constants.last50msgs[message.channel.id]
 						))
 				)
