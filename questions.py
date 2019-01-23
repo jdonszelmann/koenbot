@@ -6,7 +6,7 @@ import socketserver
 import json
 
 path = os.path.dirname(os.path.abspath(__file__))
-baseurl = "localhost:80"
+baseurl = "145.130.58.197:8800"
 
 def serverproc():
 	PORT = 80
