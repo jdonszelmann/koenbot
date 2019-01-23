@@ -132,7 +132,7 @@ async def onmessage(message):
 					baseurl,
 					str(questionnumber)
 				) + "\nhttp://{}/questions/q{}.html".format(
-					"192.168.2.254:8800",
+					"192.168.2.12:8800",
 					str(questionnumber)
 				)
 			)
