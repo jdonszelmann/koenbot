@@ -17,11 +17,29 @@ def serverproc():
 	def do_POST(self):
 		data = self.rfile.read(int(self.headers['Content-Length']))
 
-		print("POST")
 
 		try:
 			jsondata = json.loads(data)
-			print(jsondata)
+
+			print("POST")
+
+			with open(os.path.join(path,"serverfiles","questions.json")) as f:
+				currentjson = json.load(f)
+
+			selected = list(filter(lambda i:i["selected"], jsondata["messages"]))
+
+			if len(selected) > 0:
+				currentjson.append({
+					"questions":selected,
+					"channel":selected[0]["channelname"],
+					"name":jsondata["name"]
+				})
+
+
+				with open(os.path.join(path,"serverfiles","questions.json"), "w") as f:
+					json.dump(currentjson,f,indent=2)
+			else:
+				pass
 
 			self.wfile.write(json.dumps({
 				"location":'http://{}/index.html'.format(baseurl)
@@ -30,14 +48,14 @@ def serverproc():
 			self.end_headers()
 			return
 
-		except:
+		except Exception as e:
+			print(e)
 
-			self.send_header('Content-type', 'application/json')
-			self.send_response(200)
-			self.end_headers()
 			self.wfile.write(json.dumps({
 				"location":'http://{}/error.html'.format(baseurl)
 			}).encode("utf-8"))
+			self.send_response(200)
+			self.end_headers()
 
 			return
 
@@ -66,19 +84,23 @@ async def onmessage(message):
 			with open(os.path.join(path,"serverfiles","template.html")) as f:
 				template = f.read()
 
-			if message.channel.id in Constants.last100msgs:
+			questionnumber = Constants.questioncounter
+			Constants.questioncounter += 1
+
+			if message.channel.id in Constants.last50msgs:
 				newfile = template.replace(
 					"XXXXXXXXXXXXXXXXXXXXX",
 					",".join((
-							"{" + "content:\"{}\",id:\"{}\",author:\"{}\",authorid:\"{}\",channelname:\"{}\",channelid:\"{}\",selected:false".format(
+							"{" + "content:\"{}\",id:\"{}\",author:\"{}\",authorid:\"{}\",channelname:\"{}\",channelid:\"{}\",selected:false,qid:\"{}\"".format(
 								i.content,
 								i.id,
 								i.author.name,
 								i.author.id,
 								message.channel.name,
 								message.channel.id,
+								questionnumber,
 							) + "}"
-							for i in Constants.last100msgs[message.channel.id]
+							for i in Constants.last50msgs[message.channel.id]
 						))
 				)
 			else:
@@ -87,8 +109,6 @@ async def onmessage(message):
 				)
 
 
-			questionnumber = Constants.questioncounter
-			Constants.questioncounter += 1
 			with open(
 				os.path.join(
 					path,
@@ -107,9 +127,9 @@ async def onmessage(message):
 				)
 			)
 
-	if message.channel.id in Constants.last100msgs:
-		Constants.last100msgs[message.channel.id].append(message)
-		while len(Constants.last100msgs[message.channel.id]) > 100:
-			Constants.last100msgs[message.channel.id].pop(0)
+	if message.channel.id in Constants.last50msgs:
+		Constants.last50msgs[message.channel.id].append(message)
+		while len(Constants.last50msgs[message.channel.id]) > 50:
+			Constants.last50msgs[message.channel.id].pop(0)
 	else:
-		Constants.last100msgs[message.channel.id] = [message]
+		Constants.last50msgs[message.channel.id] = [message]

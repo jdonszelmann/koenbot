@@ -6,5 +6,5 @@ class Constants:
 	membersbyname = {}
 	servers = {}
 	client = None  
-	last100msgs = {}
+	last50msgs = {}
 	questioncounter = 0

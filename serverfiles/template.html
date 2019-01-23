@@ -70,7 +70,6 @@
 		question name: <br><br>
 		<input id="questionname" type="text"></input>
 		<br>
-		<br>
 		<button onclick="done()">submit</input>
 	</div>
 
@@ -80,6 +79,12 @@
 	</div> 
 
 	<script type="text/javascript">
+
+		if(messages.length == 0){
+			document.getElementById("title").innerHTML = ""
+		}else{
+			document.getElementById("title").innerHTML = messages[0].channelname
+		}
 
 		function done(){
 			let xhr = new XMLHttpRequest();
@@ -92,7 +97,7 @@
 				}
 			};
 
-			xhr.send(JSON.stringify({test:"okay"}))		
+			xhr.send(JSON.stringify({name:document.getElementById("questionname").value,messages:messages}))		
 		}
 
 		function clickmessage(self){
@@ -101,7 +106,19 @@
 			}else{
 				self.clicked = !self.clicked
 			}
+			console.log(self)
+			console.log(self.getAttribute("messageid"))
+			let mid = self.getAttribute("messageid");
 
+			let currentmessage;
+			for(let i of messages){
+				if(i.id == mid){
+					currentmessage = i; 
+					break;
+				}
+			}
+
+			currentmessage.selected = !currentmessage.selected
 
 			if(self.clicked){
 				self.style.backgroundColor = "rgba(30,155,30,0.8)"

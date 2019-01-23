@@ -1,0 +1,70 @@
+[
+  {
+    "questions": [
+      {
+        "content": "test",
+        "id": "537660537136218130",
+        "author": "jonay2000",
+        "authorid": "131399667442384896",
+        "channelname": "staff-bot-testing",
+        "channelid": "518180868414767115",
+        "selected": true,
+        "qid": "0"
+      }
+    ],
+    "channel": "staff-bot-testing",
+    "name": "test"
+  },
+  {
+    "questions": [
+      {
+        "content": "test",
+        "id": "537660833812054046",
+        "author": "jonay2000",
+        "authorid": "131399667442384896",
+        "channelname": "staff-bot-testing",
+        "channelid": "518180868414767115",
+        "selected": true,
+        "qid": "1"
+      },
+      {
+        "content": ".question",
+        "id": "537660842024632331",
+        "author": "jonay2000",
+        "authorid": "131399667442384896",
+        "channelname": "staff-bot-testing",
+        "channelid": "518180868414767115",
+        "selected": true,
+        "qid": "1"
+      }
+    ],
+    "channel": "staff-bot-testing",
+    "name": "test"
+  },
+  {
+    "questions": [
+      {
+        "content": "yeah wrong channel",
+        "id": "537661137223680050",
+        "author": "jonay2000",
+        "authorid": "131399667442384896",
+        "channelname": "l\u00f6\u00f6ps-club",
+        "channelid": "483658492234825728",
+        "selected": true,
+        "qid": "3"
+      },
+      {
+        "content": "but it's starting to be something now",
+        "id": "537661170987827200",
+        "author": "jonay2000",
+        "authorid": "131399667442384896",
+        "channelname": "l\u00f6\u00f6ps-club",
+        "channelid": "483658492234825728",
+        "selected": true,
+        "qid": "3"
+      }
+    ],
+    "channel": "l\u00f6\u00f6ps-club",
+    "name": "test"
+  }
+]
