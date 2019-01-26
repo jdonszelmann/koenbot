@@ -51,7 +51,7 @@ async def check_reactions(message):
 		await Constants.client.add_reaction(message,await get_emoji("fr00d"))
 
 	
-	if "slack" in content:
+	if "slack" in content or "s word" in content:
 		await Constants.client.add_reaction(message,await get_emoji("newgod"))	
 
 	# if "eclipse" in content:

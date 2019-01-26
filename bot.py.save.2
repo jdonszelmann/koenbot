@@ -1,0 +1,299 @@
+
+import discord
+
+import asyncio
+
+import random
+import requests
+
+from discord.utils import get
+import json
+
+
+TOKEN = 'NTA3NDkyNjQ1MTk1NzQzMjUy.Drxxpg.V5ZDd7NrLDl-TqM48706PPwCBcc'
+import re
+
+
+client = discord.Client()
+
+
+@client.event
+
+async def on_message(message):
+
+	# we do not want the bot to reply to itself
+
+	if message.author == client.user:
+
+		return
+
+
+	if "amazing" in message.content.lower():
+
+		# await client.send_message(message.channel, "it's Amaaaaaazzzziiinngggg")
+
+		# emoji = get(client.get_all_emojis(), name='blueball1')
+
+		for i in client.get_all_emojis():
+
+			if i.name == "blueball":
+
+				await client.add_reaction(message, i)
+
+				break
+
+	content = message.content.lower()
+	if "fraud" in content or "fr00d" in content or "copy" in content or "copie" in content:
+		for i in client.get_all_emojis():
+			if i.name == "fr00d":
+				await client.add_reaction(message,i)
+				break
+
+	if "bot" not in message.channel.name:
+
+		return
+
+
+	if message.content.startswith(".help"):
+
+		await client.send_message(message.channel, "this is koenbot. amazing!")
+
+
+def generate_expr():
+
+	a = "jona"
+
+	b = "than"
+
+
+	infront = ""
+
+	operator = "^"
+
+
+	def invertandor():
+
+		nonlocal operator,a,b,infront
+
+		if random.choice([True,False]):
+
+			if  a.startswith("¬") and operator == "v":
+
+				a = a[1:]
+
+				operator = "->"
+
+			elif b.startswith("¬") and operator == "^" and infront.startswith("¬"):
+
+				b = b[1:]
+
+				operator = "->"
+
+				infront = infront[1:]
+
+			return
+
+
+		if operator == "->":
+
+			choice = random.choice([0,1,2,3,4,5,6])
+
+			if choice == 1:
+
+				operator = "v"
+
+				a = "¬" + a
+
+			elif choice == 2:
+
+				operator = "^"
+
+				b = "¬" + b
+
+				infront = "¬" + infront
+
+			elif choice == 3:
+
+				if a.startswith("¬") and b.startswith("¬"):
+
+					if random.choice([True,False]):
+
+						a = a[1:]
+
+						b = b[1:]
+
+						a,b=b,a
+
+					else:
+
+						a = "¬" + a
+
+						b = "¬" + b
+
+						a,b=b,a
+
+				else:
+
+					a = "¬" + a
+
+					b = "¬" + b
+
+					a,b=b,a
+
+
+			return
+
+
+		choice = random.choice([0,1,2])
+
+		if choice == 0:
+
+			if a.startswith("¬") and b.startswith("¬") and infront.startswith("¬"):
+
+				a = a[1:]
+
+				b = b[1:]
+
+				infront = infront[1:]
+
+				if operator == "v":
+
+					operator = "^"
+
+				elif operator == "^":
+
+					operator = "v"
+
+			else:
+
+				a = "¬" + a
+
+				b = "¬" + b
+
+				infront += "¬"
+
+				if operator == "v":
+
+					operator = "^"
+
+				elif operator == "^":
+
+					operator = "v"
+
+		elif choice == 1:
+
+			a = "¬" + a
+
+			b = "¬" + b			
+
+			infront += "¬"
+
+			if operator == "v":
+
+				operator = "^"
+
+			elif operator == "^":
+
+				operator = "v"
+
+
+	while random.choice([True,True,True,True,True,True,True,True,True,False]):
+
+		invertandor()
+
+
+	while infront.startswith("¬¬¬¬¬"):
+
+		infront = infront[2:]
+
+
+	while a.startswith("¬¬¬¬¬"):
+
+		a = a[2:]
+
+
+	while b.startswith("¬¬¬¬¬"):
+
+		b = b[2:]
+
+
+	name = "(" + infront + "(" + a + " " + operator + " " + b + ")" + ")"
+
+
+
+	return name
+
+
+@client.event
+
+async def on_ready():
+
+
+	texchannels = []
+
+	members = []
+
+	servers = []
+
+	for server in client.servers:
+
+		servers.append(server)
+
+		for channel in server.channels:
+
+			if str(channel.type) == "text":
+
+				texchannels.append(channel)
+
+		for member in server.members:
+
+			members.append(member)
+
+
+
+	creator = None
+	elmedint = None
+	bot = None
+
+	for i in members:
+
+		if i.id == "131399667442384896":
+
+			creator = i
+
+		elif i.id == "507492645195743252":
+
+			bot = i 
+		elif i.id == "481464825776570368":
+			elmedin = i
+
+	await client.change_nickname(bot, "(.)koenbot")
+
+
+	# role = get(bot.server.roles, name="Beta")
+
+	# await client.add_roles(bot, role)
+
+
+	print('koenbot started')
+
+	def randomcapitalize(x):
+		return "".join((i.upper() if random.choice([True,False]) else i for i in x))
+
+
+	async def amazing():
+		while True:
+			await asyncio.sleep(10)
+
+			
+			#await client.change_nickname(elmedin,randomcapitalize("doctor"))
+			newnick = generate_expr()
+			await client.change_nickname(creator, newnick)
+
+			print("changed to {}".format(newnick))
+
+	await amazing()
+
+
+
+client.run(TOKEN)
