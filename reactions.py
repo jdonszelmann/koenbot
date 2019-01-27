@@ -16,18 +16,18 @@ async def check_reactions(message):
 	if "oof" in content and not ":oof:" in content:
 		await Constants.client.add_reaction(message,await get_emoji("oof"))
 
-	if ("kerrie" in content or "kerry" in content or "carry" in content or "otto" in content) and not ":kerrie:" in content:
-		await Constants.client.add_reaction(message,"🇰")
-		await Constants.client.add_reaction(message,"🇪")
-		await Constants.client.add_reaction(message,"🇷")
-		await Constants.client.add_reaction(message,await get_emoji("kerrier"))
-		# await Constants.client.add_reaction(message,"®️")
-		await Constants.client.add_reaction(message,"🇮")
-		await Constants.client.add_reaction(message,await get_emoji("kerriee"))
-		# await Constants.client.add_reaction(message,"🇪")
+	#if ("kerrie" in content or "kerry" in content or "carry" in content or "otto" in content) and not ":kerrie:" in content:
+	#	await Constants.client.add_reaction(message,"🇰")
+	#	await Constants.client.add_reaction(message,"🇪")
+	#	await Constants.client.add_reaction(message,"🇷")
+	#	await Constants.client.add_reaction(message,await get_emoji("kerrier"))
+	#	# await Constants.client.add_reaction(message,"®️")
+	#	await Constants.client.add_reaction(message,"🇮")
+	#	await Constants.client.add_reaction(message,await get_emoji("kerriee"))
+	#	# await Constants.client.add_reaction(message,"🇪")
 
-	if "blob" in content and not ":blob:" in content:
-		await Constants.client.add_reaction(message, await get_emoji("blob"))
+	#if "blob" in content and not ":blob:" in content:
+	#	await Constants.client.add_reaction(message, await get_emoji("blob"))
 
 	if "```java" in content and not ":java:" in content:
 		await Constants.client.add_reaction(message,await get_emoji("java"))
@@ -44,11 +44,11 @@ async def check_reactions(message):
 	if ("```csharp" in content) and not ":csharp:" in content:
 		await Constants.client.add_reaction(message,await get_emoji("csharp"))
 
-	if ("amazing" in content or "it depends" in content):
-		await Constants.client.add_reaction(message, await get_emoji("blueball"))
+	#if ("amazing" in content or "it depends" in content):
+	#	await Constants.client.add_reaction(message, await get_emoji("blueball"))
 
-	if ("fraud" in content or "fr00d" in content or "copy" in content or "copie" in content) and not ":fr00d:" in content:
-		await Constants.client.add_reaction(message,await get_emoji("fr00d"))
+	#if ("fraud" in content or "fr00d" in content or "copy" in content or "copie" in content) and not ":fr00d:" in content:
+	#	await Constants.client.add_reaction(message,await get_emoji("fr00d"))
 
 	
 	if "slack" in content or "s word" in content:
