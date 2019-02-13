@@ -5,7 +5,7 @@ import re
 import namechanger
 import reactions
 from constants import Constants
-import questions
+#import questions
 
 
 
@@ -25,7 +25,7 @@ async def on_message(message):
 
 		await reactions.check_reactions(message)
 
-		await questions.onmessage(message)
+		#await questions.onmessage(message)
 
 		if "bot" not in message.channel.name:
 			return
@@ -69,7 +69,7 @@ async def every60sec():
 async def on_ready():
 	global members,servers,general,creator,bot,texchannels
 
-	questions.init()
+	#questions.init()
 
 	print("retrieving server info")
 	for server in Constants.client.servers:
