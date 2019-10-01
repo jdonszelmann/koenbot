@@ -32,7 +32,7 @@ async def on_message(message):
 
 
 		if content.startswith(".help"):
-			await Constants.client.send_message(message.channel, "this is koenbot. amazing!")
+			await Constants.client.send_message(message.channel, "this is koenbot. amaaaaaaazing!")
 		
 	except Exception as e:
 		print(e)
@@ -41,7 +41,7 @@ async def on_message(message):
 
 async def every10sec():
 	while True:
-		newnick = namechanger.generate_expr("jona","than")
+		newnick = namechanger.generate_expr("rob","bin")
 		try:
 			await Constants.client.change_nickname(
 				Constants.membersbyid["131399667442384896"][0],
